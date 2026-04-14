@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Event {
+  id              String    @id @default(uuid())
+  title           String
+  description     String    @db.Text
+  dateStart       DateTime
+  dateEnd         DateTime?
+  locationName    String
+  locationAddress String?
+  latitude        Float?
+  longitude       Float?
+
+  category        Category
+  imageUrl        String?
+  sourceUrl       String?
+  isFeatured      Boolean   @default(false)
+  status          Status    @default(DRAFT)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([dateStart])
+  @@index([category])
+  @@index([status])
+}
+
+enum Category {
+  MUSIC
+  CULTURE
+  PARTY
+  FLEAMARKET
+  UNI
+  SPORT
+  OTHER
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
